@@ -1,25 +1,17 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
 
 class App extends Component {
   render() {
     return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
+      <div style={{ position: 'fixed', top: 0, left: 0}}>
+        <div style={{ position: 'fixed', top: 10, right: 120, display: 'flex', flexDirection: 'row', fontFamily: 'Arial' }}>
+          <h2 style={{ flex: '1 0 100px' }}>
+            <a href="" style={{ borderBottom: 0 }}>Logout</a>
+          </h2>
+        </div>
+        <div style={{ position: 'fixed', top: 50, left: 0}}>
+
+        </div>
       </div>
     );
   }
