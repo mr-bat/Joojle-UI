@@ -17,6 +17,7 @@ import Icon from '@material-ui/icons/ThumbUp';
 const styles = theme => ({
   root: {
     width: '100%',
+    marginBottom: theme.spacing.unit,
   },
   heading: {
     fontSize: theme.typography.pxToRem(15),
@@ -112,11 +113,11 @@ class DetailedExpansionPanel extends Component {
             />
             </div>
             <div className={classNames(classes.column, classes.helper)}>
-              <Button variant="contained" color="secondary" className={classes.button} onClick={() => this.setState({vote: +1})}>
+              <Button variant="contained" color="secondary" className={classes.button} onClick={() => this.setState({vote: +1})} disabled={!notFinal} >
                 {Upvote + (vote > 0 ? 1 : 0)}
                 <DeleteIcon className={classes.rightIcon} />
               </Button>
-              <Button variant="contained" color="primary" className={classes.button} onClick={() => this.setState({vote: -1})}>
+              <Button variant="contained" color="primary" className={classes.button} onClick={() => this.setState({vote: -1})} disabled={!notFinal}>
                 {Downvote + (vote < 0 ? 1 : 0)}
                 {/* This Button uses a Font Icon, see the installation instructions in the docs. */}
                 <Icon className={classes.rightIcon}>send</Icon>
