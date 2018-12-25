@@ -36,22 +36,29 @@ class Dashboard extends Component {
       headers: {
         Authorization: 'Bearer ' + document.cookie.substring(6),
       }
-    }).then((data) => console.log('axios: ', data));
+    }).then(({data}) => {
+      this.setState({events: data.events});
+      console.log('axios: ', data);
+    });
   };
-  normalizeEvent = ({participants, ...rest}) => ({
-    participantEmails: participants.splice(','),
+  normalizeEvent = ({participants, beginsAt, until, ...rest}) => ({
+    beginsAt: beginsAt && beginsAt.toString(),
+    until: until && until.toString(),
+    participantEmails: participants && participants.split(','),
     ...rest,
   });
   createEvent = event => {
+    console.log(event);
     const finalEvent = this.normalizeEvent(event);
     console.log(finalEvent);
     event.participants =
     axios.post('http://localhost:3000/event', {
       ...finalEvent,
+    }, {
       headers: {
         Authorization: 'Bearer ' + document.cookie.substring(6),
       },
-    }).then((data) => console.log('axiosPost ', data));
+    }).then((data) => console.log('axiosPost ', data)).then(this.getEvents);
   };
 
   componentDidMount() {
@@ -74,7 +81,7 @@ class Dashboard extends Component {
         <NewEvent open={dialogOpen} handleClose={() => this.setState({ dialogOpen: false })} createEvent={this.createEvent} />
         <div style={{ paddingTop: 100, marginRight: 100, marginLeft: 100, marginBottom: 100, height: window.innerHeight }} >
           <div style={{ width: '100%', height: '100%', overflow: 'scroll' }}>
-            {this.state.events.map(e => <Card />)}
+            {this.state.events.map(e => <Card title={e.title} description={e.description} />)}
             <Card
               title="Let's gather"
               description='Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Integer eget aliquet nibh praesent. Faucibus ornare suspendisse sed nisi lacus. Habitant morbi tristique senectus et netus. Pellentesque massa placerat duis ultricies lacus sed.'
