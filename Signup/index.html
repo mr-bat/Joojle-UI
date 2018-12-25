@@ -32,7 +32,7 @@
 	<div class="limiter">
 		<div class="container-login100">
 			<div class="wrap-login100">
-				<form class="login100-form validate-form">
+				<form class="login100-form validate-form" action="http://localhost:3000/user/sign_up" method="post" id="signup" >
 					<span class="login100-form-title p-b-26">
 						Welcome
 					</span>
@@ -41,7 +41,7 @@
 					<!--</span>-->
 
 					<div class="wrap-input100 validate-input" data-validate = "Use latin characters">
-						<input class="input100" type="text" name="name">
+						<input class="input100" type="text" name="username">
 						<span class="focus-input100" data-placeholder="Name"></span>
 					</div>
 
@@ -61,7 +61,7 @@
 					<div class="container-login100-form-btn">
 						<div class="wrap-login100-form-btn">
 							<div class="login100-form-bgbtn"></div>
-							<button class="login100-form-btn">
+							<button type="submit" form="signup" class="login100-form-btn">
 								Signup
 							</button>
 						</div>
