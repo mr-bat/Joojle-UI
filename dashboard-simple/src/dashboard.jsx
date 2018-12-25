@@ -38,8 +38,16 @@ class Dashboard extends Component {
       }
     }).then((data) => console.log('axios: ', data));
   };
+  normalizeEvent = ({participants, ...rest}) => ({
+    participantEmails: participants.splice(','),
+    ...rest,
+  });
   createEvent = event => {
+    const finalEvent = this.normalizeEvent(event);
+    console.log(finalEvent);
+    event.participants =
     axios.post('http://localhost:3000/event', {
+      ...finalEvent,
       headers: {
         Authorization: 'Bearer ' + document.cookie.substring(6),
       },
@@ -63,7 +71,7 @@ class Dashboard extends Component {
             Logout
           </Button>
         </div>
-        <NewEvent open={dialogOpen} handleClose={() => this.setState({ dialogOpen: false })}/>
+        <NewEvent open={dialogOpen} handleClose={() => this.setState({ dialogOpen: false })} createEvent={this.createEvent} />
         <div style={{ paddingTop: 100, marginRight: 100, marginLeft: 100, marginBottom: 100, height: window.innerHeight }} >
           <div style={{ width: '100%', height: '100%', overflow: 'scroll' }}>
             {this.state.events.map(e => <Card />)}
