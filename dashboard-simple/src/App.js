@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Dashboard from './dashboard';
 
 class App extends Component {
   render() {
@@ -9,8 +10,8 @@ class App extends Component {
             <a href="" style={{ borderBottom: 0 }}>Logout</a>
           </h2>
         </div>
-        <div style={{ position: 'fixed', top: 50, left: 0}}>
-
+        <div style={{ position: 'fixed', top: 50, left: 0, width: '100%'}}>
+          <Dashboard />
         </div>
       </div>
     );
