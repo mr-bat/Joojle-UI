@@ -70,7 +70,6 @@ class DetailedExpansionPanel extends Component {
     };
   }
   fixDescription = description => {
-    console.log(description, description.length, description.substring(0, 30));
     return description.length < 35 ? description : description.substring(0, 30)+'...';
   }
   render() {
