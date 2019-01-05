@@ -13,8 +13,6 @@ import Button from '@material-ui/core/Button';
 import Divider from '@material-ui/core/Divider';
 import DeleteIcon from '@material-ui/icons/ThumbDown';
 import Icon from '@material-ui/icons/ThumbUp';
-import axios from 'axios/index';
-import { baseUrl } from './config';
 
 const styles = theme => ({
   root: {
@@ -114,13 +112,24 @@ class DetailedExpansionPanel extends Component {
             />
             </div>
             <div className={classNames(classes.column, classes.helper)}>
-              <Button variant="contained" color="secondary" className={classes.button} onClick={() => this.setState({vote: +1})} disabled={!notFinal} >
+              <Button
+                variant="contained"
+                color="secondary"
+                className={classes.button}
+                onClick={() => this.props.setVote({ verdict: 'Yes', pollItemId: 'null' })}
+                disabled={!notFinal}
+              >
                 {Upvote + (vote > 0 ? 1 : 0)}
                 <DeleteIcon className={classes.rightIcon} />
               </Button>
-              <Button variant="contained" color="primary" className={classes.button} onClick={() => this.setState({vote: -1})} disabled={!notFinal}>
+              <Button
+                variant="contained"
+                color="primary"
+                className={classes.button}
+                onClick={() => this.props.setVote({ verdict: 'No', pollItemId: 'null' })}
+                disabled={!notFinal}
+              >
                 {Downvote + (vote < 0 ? 1 : 0)}
-                {/* This Button uses a Font Icon, see the installation instructions in the docs. */}
                 <Icon className={classes.rightIcon}>send</Icon>
               </Button>
             </div>
@@ -139,6 +148,7 @@ class DetailedExpansionPanel extends Component {
 
 DetailedExpansionPanel.propTypes = {
   classes: PropTypes.object.isRequired,
+  setVote: PropTypes.func.isRequired,
 };
 
 export default withStyles(styles)(DetailedExpansionPanel);

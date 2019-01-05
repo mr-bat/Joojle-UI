@@ -63,6 +63,9 @@ class Dashboard extends Component {
       },
     }).then((data) => console.log('axiosPost create Events:', data)).then(this.getEvents);
   };
+  setVote = ({ verdict, pollItemId }) => {
+    axios.post(`${baseUrl}/poll/vote`, {verdict, pollItemId}).then(this.getEvents);
+  };
 
   componentDidMount() {
     this.getEvents();
@@ -92,6 +95,7 @@ class Dashboard extends Component {
                 Upvote={e.upvote || Math.ceil(Math.random() * 3)}
                 Downvote={e.downvote || Math.ceil(Math.random() * 3)}
                 notFinal={e.notFinal}
+                setVote={this.setVote}
               />
             )}
           </div>
