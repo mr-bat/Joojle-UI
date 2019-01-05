@@ -52,6 +52,7 @@ class Dashboard extends Component {
     ...rest,
   });
   createEvent = event => {
+    this.closeDialog();
     const finalEvent = this.normalizeEvent(event);
     // event.participants =
     axios.post(`${baseUrl}/event`, {
@@ -69,6 +70,9 @@ class Dashboard extends Component {
   componentDidMount() {
     this.getEvents();
   }
+  closeDialog = () => {
+    this.setState({ dialogOpen: false });
+  };
   render() {
     const { classes } = this.props;
     const { dialogOpen, events } = this.state;
@@ -84,11 +88,12 @@ class Dashboard extends Component {
             Logout
           </Button>
         </div>
-        <NewEvent open={dialogOpen} handleClose={() => this.setState({ dialogOpen: false })} createEvent={this.createEvent} />
+        <NewEvent open={dialogOpen} handleClose={this.closeDialog} createEvent={this.createEvent} />
         <div style={{ paddingTop: 100, marginRight: 100, marginLeft: 100, marginBottom: 100, height: window.innerHeight }} >
           <div style={{ width: '100%', height: '100%', overflow: 'scroll' }}>
             {events.map(e =>
               <Card
+                creator={e.owner.username}
                 title={e.title}
                 pollItems={e.pollItems}
                 description={e.description}
