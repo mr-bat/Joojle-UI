@@ -39,11 +39,10 @@ class Dashboard extends Component {
       }
     }).then(({data}) => {
       console.log('axiosGet events: ', data);
-      this.setState({events: data.result.map(({event, status, acceptCount, declineCount}) => ({
+      this.setState({events: data.result.map(({event, poll, pollItems}) => ({
           ...event,
-          notFinal: (status === 'Open'),
-          upvote: acceptCount,
-          downvote: declineCount,
+          notFinal: (poll.status === 'Open'),
+          pollItems,
         }))});
     });
   };
@@ -73,7 +72,7 @@ class Dashboard extends Component {
   render() {
     const { classes } = this.props;
     const { dialogOpen, events } = this.state;
-    console.log('events: ', events);
+    // console.log('events: ', events);
 
     return (
       <div>
@@ -91,9 +90,8 @@ class Dashboard extends Component {
             {events.map(e =>
               <Card
                 title={e.title}
+                pollItems={e.pollItems}
                 description={e.description}
-                Upvote={e.upvote || Math.ceil(Math.random() * 3)}
-                Downvote={e.downvote || Math.ceil(Math.random() * 3)}
                 notFinal={e.notFinal}
                 setVote={this.setVote}
               />

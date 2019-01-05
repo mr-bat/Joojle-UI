@@ -72,9 +72,103 @@ class DetailedExpansionPanel extends Component {
   fixDescription = description => {
     return description.length < 35 ? description : description.substring(0, 30)+'...';
   };
+  renderOptions = (Upvote, Downvote, isFinal, pollItemId) => (
+    <div className={classNames(this.props.classes.column, this.props.classes.helper)}>
+      <Button
+        variant="contained"
+        color="secondary"
+        className={this.props.classes.button}
+        onClick={() => this.props.setVote({ verdict: 'Yes', pollItemId })}
+        disabled={isFinal}
+      >
+        {Upvote}
+        <DeleteIcon className={this.props.classes.rightIcon} />
+      </Button>
+      <Button
+        variant="contained"
+        color="primary"
+        className={this.props.classes.button}
+        onClick={() => this.props.setVote({ verdict: 'No', pollItemId })}
+        disabled={isFinal}
+      >
+        {Downvote}
+        <Icon className={this.props.classes.rightIcon}>send</Icon>
+      </Button>
+    </div>
+  );
+  renderNotFinalCard = () => (
+    <div style={{ height: 'auto' }} >
+      <ExpansionPanelDetails className={this.props.classes.details}>
+        <div className={this.props.classes.column}>
+          <Typography className={this.props.classes.secondaryHeading}>{this.props.description}</Typography>
+        </div>
+        <div className={this.props.classes.column}>
+          <Typography className={this.props.classes.heading}>{this.props.creator}</Typography>
+        </div>
+      </ExpansionPanelDetails>
+      {this.props.pollItems.map(({startDate, endDate, acceptCount, declineCount, poll}) => (
+        <ExpansionPanelDetails className={this.props.classes.details}>
+          <div className={this.props.classes.column}>
+            <TextField
+              disabled
+              label="Begins at"
+              type="datetime-local"
+              defaultValue={startDate.substring(0, 16)}
+              className={this.props.classes.textField}
+              InputLabelProps={{
+                shrink: true,
+              }}
+            />
+          </div>
+          <div className={this.props.classes.column}>
+            <TextField
+              disabled
+              label="Until"
+              type="datetime-local"
+              defaultValue={endDate.substring(0, 16)}
+              className={this.props.classes.textField}
+              InputLabelProps={{
+                shrink: true,
+              }}
+            />
+          </div>
+          {this.renderOptions(acceptCount, declineCount, false, poll)}
+        </ExpansionPanelDetails>
+      ))}
+    </div>
+  );
+  renderFinalCard = () => (
+    <ExpansionPanelDetails className={this.props.classes.details}>
+      <div className={this.props.classes.column}>
+        <Typography className={this.props.classes.secondaryHeading}>{this.props.description}</Typography>
+      </div>
+      <div className={this.props.classes.column}>
+        <TextField
+          disabled
+          label="Begins at"
+          type="datetime-local"
+          defaultValue="2017-05-24T10:30"
+          className={this.props.classes.textField}
+          InputLabelProps={{
+            shrink: true,
+          }}
+        /><TextField
+        disabled
+        label="Until"
+        type="datetime-local"
+        defaultValue="2017-05-24T10:30"
+        className={this.props.classes.textField}
+        InputLabelProps={{
+          shrink: true,
+        }}
+      />
+      </div>
+      {this.renderOptions(this.props.upvote, this.props.downvote, true, this.props.pollItemId)}
+    </ExpansionPanelDetails>
+  );
   render() {
-    const {classes, title, description, notFinal, Upvote, Downvote} = this.props;
-    const {vote} = this.state;
+    const {classes, title, description, notFinal} = this.props;
+    console.log('Fuck: ', this.props);
     return (
       <div className={classes.root}>
         <ExpansionPanel defaultExpanded>
@@ -86,58 +180,16 @@ class DetailedExpansionPanel extends Component {
               <Typography className={classes.secondaryHeading}>{this.fixDescription(description)}</Typography>
             </div>
           </ExpansionPanelSummary>
-          <ExpansionPanelDetails className={classes.details}>
-            <div className={classes.column}>
-              <Typography className={classes.secondaryHeading}>{description}</Typography>
-            </div>
-            <div className={classes.column}>
-              <TextField
-                disabled
-                label="Begins at"
-                type="datetime-local"
-                defaultValue="2017-05-24T10:30"
-                className={classes.textField}
-                InputLabelProps={{
-                  shrink: true,
-                }}
-              /><TextField
-              disabled
-              label="Until"
-              type="datetime-local"
-              defaultValue="2017-05-24T10:30"
-              className={classes.textField}
-              InputLabelProps={{
-                shrink: true,
-              }}
-            />
-            </div>
-            <div className={classNames(classes.column, classes.helper)}>
-              <Button
-                variant="contained"
-                color="secondary"
-                className={classes.button}
-                onClick={() => this.props.setVote({ verdict: 'Yes', pollItemId: 'null' })}
-                disabled={!notFinal}
-              >
-                {Upvote + (vote > 0 ? 1 : 0)}
-                <DeleteIcon className={classes.rightIcon} />
-              </Button>
-              <Button
-                variant="contained"
-                color="primary"
-                className={classes.button}
-                onClick={() => this.props.setVote({ verdict: 'No', pollItemId: 'null' })}
-                disabled={!notFinal}
-              >
-                {Downvote + (vote < 0 ? 1 : 0)}
-                <Icon className={classes.rightIcon}>send</Icon>
-              </Button>
-            </div>
-          </ExpansionPanelDetails>
+          {notFinal ? this.renderNotFinalCard(): this.renderFinalCard()}
           <Divider/>
-          {notFinal && <ExpansionPanelActions>
+          {notFinal ? <ExpansionPanelActions style={{ height: 'auto' }} >
             <Button size="small" color="primary">
               Finailize
+            </Button>
+          </ExpansionPanelActions> :
+          <ExpansionPanelActions>
+            <Button size="small" color="primary">
+              Change Schedule
             </Button>
           </ExpansionPanelActions>}
         </ExpansionPanel>
