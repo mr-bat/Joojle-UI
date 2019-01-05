@@ -1,9 +1,10 @@
 import React from 'react';
 import DateFnsUtils from '@date-io/date-fns';
 import Button from '@material-ui/core/Button';
+import xrange from 'xrange';
 import TextField from '@material-ui/core/TextField';
 import Dialog from '@material-ui/core/Dialog';
-import Icon from '@material-ui/core/Icon';
+import AddIcon from '@material-ui/icons/AddCircleOutline';
 import DeleteOutlinedIcon from '@material-ui/icons/DeleteOutlined';
 import { withStyles } from '@material-ui/core/styles';
 import IconButton from '@material-ui/core/IconButton';
@@ -26,8 +27,7 @@ class FormDialog extends React.Component {
   constructor() {
     super();
     this.state = {
-      beginsAt: null,
-      until: null,
+      pollItems: [{beginsAt: null, until: null}],
       title: null,
       description: null,
       participants: null,
@@ -38,8 +38,25 @@ class FormDialog extends React.Component {
       [name]: event.target.value,
     });
   };
+  deletePollItem = (idx) => {
+    const {pollItems} = this.state;
+    pollItems.splice(idx, 1);
+    this.setState({pollItems});
+  };
+  addPollItem = () => {
+    const {pollItems} = this.state;
+    pollItems.push({beginsAt: null, until: null});
+    this.setState({pollItems});
+  };
+  setVote = (beginsAt, until, idx) => {
+    const {pollItems} = this.state;
+    if (beginsAt)
+      pollItems[idx].beginsAt = beginsAt;
+    if (until)
+      pollItems[idx].until = until;
+    this.setState({pollItems});
+  };
   render() {
-    const {beginsAt, until} = this.state;
     return (
       <Dialog
         open={this.props.open}
@@ -65,13 +82,15 @@ class FormDialog extends React.Component {
             type="description"
             fullWidth
           />
-          <MuiPickersUtilsProvider utils={DateFnsUtils} style={{ marginTop: 30 }} >
-            <DateTimePicker value={beginsAt} label="Begins at" style={{ width: '33.33%', marginRight: 10, marginTop: 10 }} onChange={d => this.setState({beginsAt: d})} />
-            <DateTimePicker value={until} label="Until" style={{ width: '33.33%', marginTop: 10 }} onChange={d => this.setState({until: d})} />
-            <IconButton color="secondary" className={this.props.classes.button} style={{ align: 'center' }} aria-label="Add an alarm">
-              <DeleteOutlinedIcon />
-            </IconButton>
-          </MuiPickersUtilsProvider>
+          {xrange(this.state.pollItems.length).map(idx =>
+            <MuiPickersUtilsProvider utils={DateFnsUtils} style={{ marginTop: 30 }} >
+              <DateTimePicker value={this.state.pollItems[idx].beginsAt} label="Begins at" style={{ width: '33.33%', marginRight: 10, marginTop: 10 }} onChange={d => this.setVote(d, null, idx)} />
+              <DateTimePicker value={this.state.pollItems[idx].until} label="Until" style={{ width: '33.33%', marginTop: 10 }} onChange={d => this.setVote(null, d, idx)} />
+              <IconButton color="secondary" className={this.props.classes.button} style={{ align: 'center' }} aria-label="Add an alarm">
+                {idx ? <DeleteOutlinedIcon onClick={() => this.deletePollItem(idx)}/>: <AddIcon onClick={() => this.addPollItem()}/>}
+              </IconButton>
+            </MuiPickersUtilsProvider>
+          )}
           <TextField
             onChange={this.handleChange('participants')}
             autoFocus

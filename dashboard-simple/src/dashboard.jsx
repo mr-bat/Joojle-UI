@@ -64,7 +64,14 @@ class Dashboard extends Component {
     }).then((data) => console.log('axiosPost create Events:', data)).then(this.getEvents);
   };
   setVote = ({ verdict, pollItemId }) => {
-    axios.post(`${baseUrl}/poll/vote`, {verdict, pollItemId}).then(this.getEvents);
+    axios.post(`${baseUrl}/poll/vote`, {
+      verdict,
+      pollItemId,
+    }, {
+      headers: {
+        Authorization: 'Bearer ' + document.cookie.substring(6),
+      },
+    }).then(this.getEvents);
   };
 
   componentDidMount() {
@@ -96,7 +103,7 @@ class Dashboard extends Component {
                 creator={e.owner.username}
                 title={e.title}
                 pollItems={e.pollItems}
-                description={e.description}
+                description={e.description || ''}
                 notFinal={e.notFinal}
                 setVote={this.setVote}
               />

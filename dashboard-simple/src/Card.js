@@ -78,20 +78,20 @@ class DetailedExpansionPanel extends Component {
         variant="contained"
         color="secondary"
         className={this.props.classes.button}
-        onClick={() => this.props.setVote({ verdict: 'Yes', pollItemId })}
+        onClick={() => this.props.setVote({ verdict: 'decline', pollItemId })}
         disabled={isFinal}
       >
-        {Upvote}
+        {Downvote}
         <DeleteIcon className={this.props.classes.rightIcon} />
       </Button>
       <Button
         variant="contained"
         color="primary"
         className={this.props.classes.button}
-        onClick={() => this.props.setVote({ verdict: 'No', pollItemId })}
+        onClick={() => this.props.setVote({ verdict: 'accept', pollItemId })}
         disabled={isFinal}
       >
-        {Downvote}
+        {Upvote}
         <Icon className={this.props.classes.rightIcon}>send</Icon>
       </Button>
     </div>
@@ -106,7 +106,7 @@ class DetailedExpansionPanel extends Component {
           <Typography className={this.props.classes.heading}>{this.props.creator}</Typography>
         </div>
       </ExpansionPanelDetails>
-      {this.props.pollItems.map(({startDate, endDate, acceptCount, declineCount, poll}) => (
+      {this.props.pollItems.map(({startDate, endDate, acceptCount, declineCount, _id: poll}) => (
         <ExpansionPanelDetails className={this.props.classes.details}>
           <div className={this.props.classes.column}>
             <TextField
