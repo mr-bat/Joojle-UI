@@ -13,6 +13,8 @@ import Button from '@material-ui/core/Button';
 import Divider from '@material-ui/core/Divider';
 import DeleteIcon from '@material-ui/icons/ThumbDown';
 import Icon from '@material-ui/icons/ThumbUp';
+import axios from 'axios/index';
+import { baseUrl } from './config';
 
 const styles = theme => ({
   root: {
@@ -71,7 +73,7 @@ class DetailedExpansionPanel extends Component {
   }
   fixDescription = description => {
     return description.length < 35 ? description : description.substring(0, 30)+'...';
-  }
+  };
   render() {
     const {classes, title, description, notFinal, Upvote, Downvote} = this.props;
     const {vote} = this.state;

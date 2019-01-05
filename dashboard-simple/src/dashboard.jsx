@@ -5,6 +5,7 @@ import axios from 'axios';
 import deepPurple from '@material-ui/core/colors/deepPurple';
 import NewEvent from './NewEvent';
 import Card from './Card';
+import { baseUrl } from './config';
 
 const styles = theme => ({
   button: {
@@ -32,7 +33,7 @@ class Dashboard extends Component {
     };
   }
   getEvents = () => {
-    axios.get('http://localhost:3000/event', {
+    axios.get(`${baseUrl}/event`, {
       headers: {
         Authorization: 'Bearer ' + document.cookie.substring(6),
       }
@@ -40,7 +41,7 @@ class Dashboard extends Component {
       console.log('axiosGet events: ', data);
       this.setState({events: data.result.map(({event, status, acceptCount, declineCount}) => ({
           ...event,
-          notFinal: (status == 'Open'),
+          notFinal: (status === 'Open'),
           upvote: acceptCount,
           downvote: declineCount,
         }))});
@@ -53,9 +54,8 @@ class Dashboard extends Component {
   });
   createEvent = event => {
     const finalEvent = this.normalizeEvent(event);
-    console.log('Normalized: ', finalEvent);
-    event.participants =
-    axios.post('http://localhost:3000/event', {
+    // event.participants =
+    axios.post(`${baseUrl}/event`, {
       ...finalEvent,
     }, {
       headers: {
@@ -94,13 +94,6 @@ class Dashboard extends Component {
                 notFinal={e.notFinal}
               />
             )}
-            {/*<Card*/}
-              {/*title="Let's gather"*/}
-              {/*description='Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Integer eget aliquet nibh praesent. Faucibus ornare suspendisse sed nisi lacus. Habitant morbi tristique senectus et netus. Pellentesque massa placerat duis ultricies lacus sed.'*/}
-              {/*notFinal*/}
-              {/*Upvote={2}*/}
-              {/*Downvote={1}*/}
-            {/*/>*/}
           </div>
         </div>
       </div>
