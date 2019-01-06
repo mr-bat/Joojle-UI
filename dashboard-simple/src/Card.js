@@ -14,6 +14,7 @@ import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import Divider from '@material-ui/core/Divider';
 import DeleteIcon from '@material-ui/icons/ThumbDown';
+import MaybeIcon from '@material-ui/icons/SentimentSatisfied';
 import Icon from '@material-ui/icons/ThumbUp';
 import Select from '@material-ui/core/Select';
 import { convertToText } from 'number-to-text';
@@ -88,6 +89,15 @@ class DetailedExpansionPanel extends Component {
       >
         {Downvote}
         <DeleteIcon className={this.props.classes.rightIcon} />
+      </Button>
+      <Button
+        variant="contained"
+        className={this.props.classes.button}
+        onClick={() => this.props.setVote({ verdict: 'maybe', pollItemId })}
+        disabled={isFinal}
+      >
+        {Downvote}
+        <MaybeIcon className={this.props.classes.rightIcon} />
       </Button>
       <Button
         variant="contained"
