@@ -35,6 +35,7 @@ class Dashboard extends Component {
       dialogOpen: false,
       chatOpen: false,
       events: [],
+      comments: [],
     };
   }
   createNotification = ({data}) => {

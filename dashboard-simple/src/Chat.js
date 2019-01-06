@@ -48,14 +48,15 @@ class FormDialog extends React.Component {
       >
         <DialogTitle id="form-dialog-title">Comments</DialogTitle>
         <DialogContent>
-          <TextField
+          {(this.props.comments || []).map(({text}) => <TextField
             disabled
             autoFocus
+            defaultValue={text}
             margin="dense"
             fullWidth
-          />
+          />)}
           <TextField
-            style={{ paddingTop: 20, width: '80%', paddingRight: 5 }}
+            style={{ paddingTop: 20, width: '75%', paddingRight: 8 }}
             onChange={e => this.setState({text: e.target.value})}
             // onChange={this.handleChange('participants')}
             autoFocus
