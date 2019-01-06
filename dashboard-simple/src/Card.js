@@ -15,7 +15,9 @@ import Button from '@material-ui/core/Button';
 import Divider from '@material-ui/core/Divider';
 import DeleteIcon from '@material-ui/icons/ThumbDown';
 import MaybeIcon from '@material-ui/icons/SentimentSatisfied';
+import MessageIcon from '@material-ui/icons/SmsOutlined';
 import Icon from '@material-ui/icons/ThumbUp';
+import IconButton from '@material-ui/core/IconButton';
 import Select from '@material-ui/core/Select';
 import { convertToText } from 'number-to-text';
 import 'number-to-text/converters/en-us';
@@ -109,6 +111,9 @@ class DetailedExpansionPanel extends Component {
         {Upvote}
         <Icon className={this.props.classes.rightIcon}>send</Icon>
       </Button>
+      <IconButton color="primary" className={this.props.classes.button} aria-label="Add to shopping cart">
+        <MessageIcon className={this.props.classes.rightIcon} />
+      </IconButton>
     </div>
   );
   renderNotFinalCard = () => (
