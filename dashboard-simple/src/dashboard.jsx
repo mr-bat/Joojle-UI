@@ -3,6 +3,8 @@ import { withStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import axios from 'axios';
 import deepPurple from '@material-ui/core/colors/deepPurple';
+import 'react-notifications/lib/notifications.css';
+import {NotificationContainer, NotificationManager} from 'react-notifications';
 import NewEvent from './NewEvent';
 import Card from './Card';
 import { baseUrl } from './config';
@@ -33,13 +35,35 @@ class Dashboard extends Component {
       events: [],
     };
   }
+  createNotification = ({data}) => {
+    const {message} = data;
+    const status = data.status || (data.success ? 'success': 'error');
+    console.log('notift: ', data);
+    console.log('st: ', status);
+
+    switch (status) {
+      case 'info':
+        NotificationManager.info(message);
+        break;
+      case 'success':
+        NotificationManager.success(message);
+        break;
+      case 'warning':
+        NotificationManager.warning(message, 'Close after 3000ms', 3000);
+        break;
+      case 'error':
+        NotificationManager.error(message, 'Click me!', 5000, () => {
+          alert('callback');
+        });
+        break;
+    }
+  };
   getEvents = () => {
     axios.get(`${baseUrl}/event`, {
       headers: {
         Authorization: 'Bearer ' + document.cookie.substring(6),
       }
     }).then(({data}) => {
-      console.log('axiosGet events: ', data);
       this.setState({events: data.result.map(({event, poll, pollItems}) => ({
           ...event,
           notFinal: (event.state === 'Open'),
@@ -62,7 +86,7 @@ class Dashboard extends Component {
       headers: {
         Authorization: 'Bearer ' + document.cookie.substring(6),
       },
-    }).then((data) => console.log('axiosPost create Events:', data)).then(this.getEvents);
+    }).then(this.createNotification).then(this.getEvents);
   };
   setVote = ({ verdict, pollItemId }) => {
     axios.post(`${baseUrl}/poll/vote`, {
@@ -72,7 +96,7 @@ class Dashboard extends Component {
       headers: {
         Authorization: 'Bearer ' + document.cookie.substring(6),
       },
-    }).then(this.getEvents);
+    }).then(this.createNotification).then(this.getEvents);
   };
   closeEvent = ({eventId, select: pollItemId}) => {
     axios.put(`${baseUrl}/event/close`, {
@@ -81,7 +105,7 @@ class Dashboard extends Component {
       headers: {
         Authorization: 'Bearer ' + document.cookie.substring(6),
       },
-    }).then(this.getEvents);
+    }).then(this.createNotification).then(this.getEvents);
   };
   openEvent = ({eventId}) => {
     axios.put(`${baseUrl}/event/open`, {
@@ -90,7 +114,7 @@ class Dashboard extends Component {
       headers: {
         Authorization: 'Bearer ' + document.cookie.substring(6),
       },
-    }).then(this.getEvents);
+    }).then(this.createNotification).then(this.getEvents);
   };
 
   componentDidMount() {
@@ -133,6 +157,7 @@ class Dashboard extends Component {
             )}
           </div>
         </div>
+        <NotificationContainer />
       </div>
     );
   }

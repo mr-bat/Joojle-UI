@@ -2,13 +2,13 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import classNames from 'classnames';
-import xrange from 'xrange';
 import ExpansionPanel from '@material-ui/core/ExpansionPanel';
 import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
 import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
 import ExpansionPanelActions from '@material-ui/core/ExpansionPanelActions';
 import MenuItem from '@material-ui/core/MenuItem';
 import Typography from '@material-ui/core/Typography';
+import InputLabel from '@material-ui/core/InputLabel';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
@@ -108,9 +108,10 @@ class DetailedExpansionPanel extends Component {
           <Typography className={this.props.classes.secondaryHeading}>{this.props.description}</Typography>
         </div>
         <div className={this.props.classes.column}>
-          <Typography className={this.props.classes.heading}>{this.props.creator}</Typography>
+          <Typography className={this.props.classes.heading}>Creator: {this.props.creator}</Typography>
         </div>
         <div className={this.props.classes.column}>
+          <InputLabel htmlFor="name-error">Selected time </InputLabel>
           <Select
             value={this.state.select}
             onChange={e => this.setState({ select: e.target.value })}
@@ -199,7 +200,11 @@ class DetailedExpansionPanel extends Component {
           {notFinal ? this.renderNotFinalCard(): this.renderFinalCard()}
           <Divider/>
           {notFinal ? <ExpansionPanelActions style={{ height: 'auto' }} >
-            <Button onClick={() => onClose({eventId, select})} size="small" color="primary">
+            <Button
+              disabled={!this.props.pollItems.some(({_id}) => select === _id)}
+              onClick={() => onClose({eventId, select})}
+              size="small" color="primary"
+            >
               Finailize
             </Button>
           </ExpansionPanelActions> :
