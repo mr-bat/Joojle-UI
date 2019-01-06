@@ -112,12 +112,8 @@ class DetailedExpansionPanel extends Component {
         </div>
         <div className={this.props.classes.column}>
           <Select
-            value={this.state.age}
-            onChange={this.handleChange}
-            inputProps={{
-              name: 'age',
-              id: 'age-simple',
-            }}
+            value={this.state.select}
+            onChange={e => this.setState({ select: e.target.value })}
           >
             {xrange(this.props.pollItems.length).map(idx =>
               <MenuItem value={idx}>{convertToText(idx + 1)}</MenuItem>
