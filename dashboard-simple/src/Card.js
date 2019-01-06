@@ -115,8 +115,8 @@ class DetailedExpansionPanel extends Component {
             value={this.state.select}
             onChange={e => this.setState({ select: e.target.value })}
           >
-            {xrange(this.props.pollItems.length).map(idx =>
-              <MenuItem value={idx}>{convertToText(idx + 1)}</MenuItem>
+            {this.props.pollItems.map(({_id}, idx) =>
+              <MenuItem value={_id}>{convertToText(idx + 1)}</MenuItem>
             )}
           </Select>
         </div>
@@ -183,7 +183,8 @@ class DetailedExpansionPanel extends Component {
     </ExpansionPanelDetails>
   );
   render() {
-    const {classes, title, description, notFinal} = this.props;
+    const {classes, title, description, notFinal, onClose, onOpen, eventId} = this.props;
+    const {select} = this.state;
     return (
       <div className={classes.root}>
         <ExpansionPanel defaultExpanded>
@@ -198,12 +199,12 @@ class DetailedExpansionPanel extends Component {
           {notFinal ? this.renderNotFinalCard(): this.renderFinalCard()}
           <Divider/>
           {notFinal ? <ExpansionPanelActions style={{ height: 'auto' }} >
-            <Button size="small" color="primary">
+            <Button onClick={() => onClose({eventId, select})} size="small" color="primary">
               Finailize
             </Button>
           </ExpansionPanelActions> :
           <ExpansionPanelActions>
-            <Button size="small" color="primary">
+            <Button onClick={() => onOpen({eventId})} size="small" color="primary">
               Change Schedule
             </Button>
           </ExpansionPanelActions>}

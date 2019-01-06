@@ -9,9 +9,12 @@
     "axios": "^0.18.0",
     "date-fns": "2.0.0-alpha.25",
     "material-ui-pickers": "^2.0.4",
+    "number-to-text": "^0.3.8",
     "react": "^16.7.0",
+    "react-chat-widget": "^2.1.4-1",
     "react-dom": "^16.7.0",
-    "react-scripts": "2.1.2"
+    "react-scripts": "2.1.2",
+    "xrange": "^1.0.1"
   },
   "scripts": {
     "start": "react-scripts start",
