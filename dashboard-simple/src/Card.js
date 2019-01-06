@@ -80,7 +80,7 @@ class DetailedExpansionPanel extends Component {
   fixDescription = description => {
     return description.length < 35 ? description : description.substring(0, 30)+'...';
   };
-  renderOptions = (Upvote, Downvote, isFinal, pollItemId) => (
+  renderOptions = (Upvote, Downvote, isFinal, pollItemId, Maybevote) => (
     <div className={classNames(this.props.classes.column, this.props.classes.helper)}>
       <Button
         variant="contained"
@@ -98,7 +98,7 @@ class DetailedExpansionPanel extends Component {
         onClick={() => this.props.setVote({ verdict: 'maybe', pollItemId })}
         disabled={isFinal}
       >
-        {Downvote}
+        {Maybevote}
         <MaybeIcon className={this.props.classes.rightIcon} />
       </Button>
       <Button
@@ -111,7 +111,7 @@ class DetailedExpansionPanel extends Component {
         {Upvote}
         <Icon className={this.props.classes.rightIcon}>send</Icon>
       </Button>
-      <IconButton color="primary" className={this.props.classes.button} aria-label="Add to shopping cart">
+      <IconButton disabled={isFinal} onClick={() => this.props.openChat(pollItemId)} color="primary" className={this.props.classes.button} aria-label="Add to shopping cart">
         <MessageIcon className={this.props.classes.rightIcon} />
       </IconButton>
     </div>
@@ -137,7 +137,7 @@ class DetailedExpansionPanel extends Component {
           </Select>
         </div>
       </ExpansionPanelDetails>
-      {this.props.pollItems.map(({startDate, endDate, acceptCount, declineCount, _id: poll}, idx) => (
+      {this.props.pollItems.map(({startDate, endDate, acceptCount, declineCount, maybeCount, _id: poll}, idx) => (
         <ExpansionPanelDetails className={this.props.classes.details}>
           <Typography className={this.props.classes.heading}>{idx + 1}:</Typography>
           <div className={this.props.classes.column}>
@@ -164,7 +164,7 @@ class DetailedExpansionPanel extends Component {
               }}
             />
           </div>
-          {this.renderOptions(acceptCount, declineCount, false, poll)}
+          {this.renderOptions(acceptCount, declineCount, false, poll, maybeCount)}
         </ExpansionPanelDetails>
       ))}
     </div>
@@ -179,23 +179,23 @@ class DetailedExpansionPanel extends Component {
           disabled
           label="Begins at"
           type="datetime-local"
-          defaultValue="2017-05-24T10:30"
+          defaultValue={this.props.startDate.substring(0, 16)}
           className={this.props.classes.textField}
           InputLabelProps={{
             shrink: true,
           }}
         /><TextField
-        disabled
-        label="Until"
-        type="datetime-local"
-        defaultValue="2017-05-24T10:30"
-        className={this.props.classes.textField}
-        InputLabelProps={{
-          shrink: true,
-        }}
-      />
+          disabled
+          label="Until"
+          type="datetime-local"
+          defaultValue={this.props.endDate.substring(0, 16)}
+          className={this.props.classes.textField}
+          InputLabelProps={{
+            shrink: true,
+          }}
+        />
       </div>
-      {this.renderOptions(this.props.upvote, this.props.downvote, true, this.props.pollItemId)}
+      {this.renderOptions(this.props.upvote, this.props.downvote, true, this.props.pollItemId, 0)}
     </ExpansionPanelDetails>
   );
   render() {

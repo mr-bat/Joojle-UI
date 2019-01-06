@@ -6,6 +6,7 @@ import deepPurple from '@material-ui/core/colors/deepPurple';
 import 'react-notifications/lib/notifications.css';
 import {NotificationContainer, NotificationManager} from 'react-notifications';
 import NewEvent from './NewEvent';
+import Chat from './Chat';
 import Card from './Card';
 import { baseUrl } from './config';
 
@@ -30,6 +31,7 @@ class Dashboard extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      pollItemId: null,
       dialogOpen: false,
       chatOpen: false,
       events: [],
@@ -49,7 +51,7 @@ class Dashboard extends Component {
         NotificationManager.success(message);
         break;
       case 'warning':
-        NotificationManager.warning(message, 'Close after 3000ms', 3000);
+        NotificationManager.warning(message, '', 3000);
         break;
       case 'error':
         NotificationManager.error(message, 'Click me!', 5000, () => {
@@ -116,6 +118,30 @@ class Dashboard extends Component {
       },
     }).then(this.createNotification).then(this.getEvents);
   };
+  openChat = (pollItemId) => {
+    this.setState({pollItemId, chatOpen: true}, this.getComments);
+  };
+  handleSendComment = (text) => {
+    const {pollItemId} = this.state;
+    axios.post(`${baseUrl}/poll_item/comment`, {
+      text,
+      pollItemId,
+    }, {
+      headers: {
+        Authorization: 'Bearer ' + document.cookie.substring(6),
+      },
+    }).then(this.createNotification);
+  };
+  getComments = () => {
+    const {pollItemId} = this.state;
+    axios.post(`${baseUrl}/poll_item/comment/fetch`, {
+      pollItemId,
+    }, {
+      headers: {
+        Authorization: 'Bearer ' + document.cookie.substring(6),
+      },
+    }).then(({data}) => this.setState({comments: data.comments.comments}));
+  };
 
   componentDidMount() {
     this.getEvents();
@@ -138,11 +164,14 @@ class Dashboard extends Component {
           </Button>
         </div>
         <NewEvent open={dialogOpen} handleClose={this.closeDialog} createEvent={this.createEvent} />
-        {/*<Chat open={chatOpen} handleClose={this.closeDialog} />*/}
+        <Chat open={chatOpen} handleClose={this.closeDialog} onSend={this.handleSendComment} comments={this.state.comments} />
         <div style={{ paddingTop: 100, marginRight: 100, marginLeft: 100, marginBottom: 100, height: window.innerHeight }} >
           <div style={{ width: '100%', height: '100%', overflow: 'scroll' }}>
             {events.map(e =>
               <Card
+                openChat={this.openChat}
+                startDate={e.startDate}
+                endDate={e.endDate}
                 eventId={e._id}
                 creator={e.owner.username}
                 title={e.title}
@@ -150,7 +179,6 @@ class Dashboard extends Component {
                 description={e.description || ''}
                 notFinal={e.notFinal}
                 setVote={this.setVote}
-                openChat={() => this.setState({chatOpen: true})}
                 onClose={this.closeEvent}
                 onOpen={this.openEvent}
               />
