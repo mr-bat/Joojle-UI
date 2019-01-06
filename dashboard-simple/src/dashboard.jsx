@@ -131,7 +131,7 @@ class Dashboard extends Component {
       headers: {
         Authorization: 'Bearer ' + document.cookie.substring(6),
       },
-    }).then(this.createNotification);
+    }).then(this.createNotification).then(this.getComments);
   };
   getComments = () => {
     const {pollItemId} = this.state;
