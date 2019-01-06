@@ -2,10 +2,12 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import classNames from 'classnames';
+import xrange from 'xrange';
 import ExpansionPanel from '@material-ui/core/ExpansionPanel';
 import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
 import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
 import ExpansionPanelActions from '@material-ui/core/ExpansionPanelActions';
+import MenuItem from '@material-ui/core/MenuItem';
 import Typography from '@material-ui/core/Typography';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import TextField from '@material-ui/core/TextField';
@@ -13,6 +15,9 @@ import Button from '@material-ui/core/Button';
 import Divider from '@material-ui/core/Divider';
 import DeleteIcon from '@material-ui/icons/ThumbDown';
 import Icon from '@material-ui/icons/ThumbUp';
+import Select from '@material-ui/core/Select';
+import { convertToText } from 'number-to-text';
+import 'number-to-text/converters/en-us';
 
 const styles = theme => ({
   root: {
@@ -35,7 +40,7 @@ const styles = theme => ({
     alignItems: 'center',
   },
   column: {
-    flexBasis: '33.33%',
+    flexBasis: '33%',
   },
   helper: {
     borderLeft: `2px solid ${theme.palette.divider}`,
@@ -105,9 +110,24 @@ class DetailedExpansionPanel extends Component {
         <div className={this.props.classes.column}>
           <Typography className={this.props.classes.heading}>{this.props.creator}</Typography>
         </div>
+        <div className={this.props.classes.column}>
+          <Select
+            value={this.state.age}
+            onChange={this.handleChange}
+            inputProps={{
+              name: 'age',
+              id: 'age-simple',
+            }}
+          >
+            {xrange(this.props.pollItems.length).map(idx =>
+              <MenuItem value={idx}>{convertToText(idx + 1)}</MenuItem>
+            )}
+          </Select>
+        </div>
       </ExpansionPanelDetails>
-      {this.props.pollItems.map(({startDate, endDate, acceptCount, declineCount, _id: poll}) => (
+      {this.props.pollItems.map(({startDate, endDate, acceptCount, declineCount, _id: poll}, idx) => (
         <ExpansionPanelDetails className={this.props.classes.details}>
+          <Typography className={this.props.classes.heading}>{idx + 1}:</Typography>
           <div className={this.props.classes.column}>
             <TextField
               disabled
@@ -168,7 +188,6 @@ class DetailedExpansionPanel extends Component {
   );
   render() {
     const {classes, title, description, notFinal} = this.props;
-    console.log('Fuck: ', this.props);
     return (
       <div className={classes.root}>
         <ExpansionPanel defaultExpanded>

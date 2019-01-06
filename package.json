@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "number-to-text": "^0.3.8",
     "xrange": "^1.0.1"
   }
 }
