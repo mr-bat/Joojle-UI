@@ -26,4 +26,6 @@ PORT=3001 npm start
 
 Now move to http://localhost:9080
 
-[Joojle-Server](https://github.com/mr-bat/Joojle-Server) is designed in a way that the UI is up on port 3001. There is no problem if you want to change the port, but if you want to utilize Joojle-Server you have to change its code yourself. This dependency is maded only because our project was first created as a course work and then grew into a serious competant application. Excuse us because of this bad design.
+**Be Cautious!** [Joojle-Server](https://github.com/mr-bat/Joojle-Server) is designed in a way that the UI is up on port 3001. There is no problem if you want to change the port, but if you want to utilize Joojle-Server you have to change its code yourself. This dependency is maded only because our project was first created as a course work and then grew into a serious competant application. Excuse us because of this bad design.
+
+Also it is worth mentioning that the background design is created from the templates provided by [HTML5 UP](http://html5up.net/)
