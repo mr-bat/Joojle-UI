@@ -2,10 +2,6 @@
 # Created by https://www.gitignore.io/api/macos,webstorm
 # Edit at https://www.gitignore.io/?templates=macos,webstorm
 
-
-.idea/**
-.idea
-
 ### macOS ###
 # General
 .DS_Store
@@ -114,3 +110,4 @@ fabric.properties
 .idea/sonarlint
 
 # End of https://www.gitignore.io/api/macos,webstorm
+.idea
