@@ -6,7 +6,8 @@ import {withStyles} from "@material-ui/core";
 import PropTypes from 'prop-types';
 import axios from "axios";
 import {baseUrl} from "./config";
-import {createNotification} from "./App";
+import {createNotification} from "./utils";
+import {Link} from "react-router-dom";
 
 const styles = theme => ({
     button: {
@@ -33,18 +34,36 @@ class NavBar extends Component {
             dialogOpen: false,
         }
     }
-    normalizeEvent = event => event;
+    normalizeEvent = event => {
+        const { beginsAt, until } = event.pollItems[0];
+        console.log(beginsAt, until);
+
+        return ({
+            'event[name]': event.title,
+            'event[description]': event.description,
+            'event[location]': event.location,
+            'event[start_time(1i)]': beginsAt.getFullYear(),
+            'event[start_time(2i)]': beginsAt.getMonth(),
+            'event[start_time(3i)]': beginsAt.getDate(),
+            'event[start_time(4i)]': beginsAt.getHours(),
+            'event[start_time(5i)]': beginsAt.getMinutes(),
+            'event[end_time(1i)]': until.getFullYear(),
+            'event[end_time(2i)]': until.getMonth(),
+            'event[end_time(3i)]': until.getDate(),
+            'event[end_time(4i)]': until.getHours(),
+            'event[end_time(5i)]': until.getMinutes(),
+            'event[user_id]': this.props.userId,
+        });
+    };
     createEvent = event => {
-        this.closeDialog();
+        this.setState({ dialogOpen: false });
         console.log(event);
         const finalEvent = this.normalizeEvent(event);
-        axios.post(`${baseUrl}/event`, {
-            ...finalEvent,
-        }, {
-            headers: {
-                Authorization: 'Bearer ' + document.cookie.substring(6),
-            },
-        }).then(createNotification).then(this.props.onUpdate);
+        axios.post(`${baseUrl}/users/${this.props.userId}/events`, null,{
+            params: {
+                ...finalEvent
+            }
+        }).then(this.props.onUpdate).then(createNotification);
     };
     render() {
         const { classes } = this.props;
@@ -58,6 +77,16 @@ class NavBar extends Component {
                 <Button variant="contained" color="primary" className={[classes.button, classes.customColor]}>
                     Logout
                 </Button>
+                <Link to='/invitations' >
+                    <Button variant="contained" color="primary" className={[classes.button, classes.customColor]}>
+                        Invitations
+                    </Button>
+                </Link>
+                <Link to='/' >
+                    <Button variant="contained" color="primary" className={[classes.button, classes.customColor]}>
+                        My Events
+                    </Button>
+                </Link>
                 <NewEvent
                     open={dialogOpen}
                     handleClose={() => this.setState({ dialogOpen: false })}
@@ -70,6 +99,7 @@ class NavBar extends Component {
 
 NavBar.propTypes = {
     onUpdate: PropTypes.func,
+    userId: PropTypes.number.isRequired,
 };
 
 NavBar.defaultProps = {

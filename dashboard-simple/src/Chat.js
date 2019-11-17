@@ -23,7 +23,7 @@ const styles = theme => ({
   },
 });
 
-class FormDialog extends React.Component {
+class Chat extends React.Component {
   constructor() {
     super();
     this.state = {
@@ -48,7 +48,7 @@ class FormDialog extends React.Component {
       >
         <DialogTitle id="form-dialog-title">Comments</DialogTitle>
         <DialogContent>
-          {(this.props.comments || []).map(({text}) => <TextField
+          {(this.props.comments || []).map((text) => <TextField
             disabled
             autoFocus
             defaultValue={text}
@@ -72,4 +72,4 @@ class FormDialog extends React.Component {
   }
 }
 
-export default withStyles(styles)(FormDialog);
+export default withStyles(styles)(Chat);

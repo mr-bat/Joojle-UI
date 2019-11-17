@@ -4,10 +4,7 @@ import Button from '@material-ui/core/Button';
 import xrange from 'xrange';
 import TextField from '@material-ui/core/TextField';
 import Dialog from '@material-ui/core/Dialog';
-import AddIcon from '@material-ui/icons/AddCircleOutline';
-import DeleteOutlinedIcon from '@material-ui/icons/DeleteOutlined';
 import { withStyles } from '@material-ui/core/styles';
-import IconButton from '@material-ui/core/IconButton';
 import { MuiPickersUtilsProvider, DateTimePicker } from 'material-ui-pickers';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -29,6 +26,7 @@ class FormDialog extends React.Component {
     this.state = {
       pollItems: [{beginsAt: null, until: null}],
       title: null,
+      location: null,
       description: null,
       participants: null,
     };
@@ -74,6 +72,15 @@ class FormDialog extends React.Component {
             type="title"
           />
           <TextField
+              onChange={this.handleChange('location')}
+              style={{ marginLeft: 30 }}
+              autoFocus
+              margin="dense"
+              id="location"
+              label="Location"
+              type="location"
+          />
+          <TextField
             onChange={this.handleChange('description')}
             autoFocus
             margin="dense"
@@ -86,20 +93,20 @@ class FormDialog extends React.Component {
             <MuiPickersUtilsProvider utils={DateFnsUtils} style={{ marginTop: 30 }} >
               <DateTimePicker value={this.state.pollItems[idx].beginsAt} label="Begins at" style={{ width: '33.33%', marginRight: 10, marginTop: 10 }} onChange={d => this.setVote(d, null, idx)} />
               <DateTimePicker value={this.state.pollItems[idx].until} label="Until" style={{ width: '33.33%', marginTop: 10 }} onChange={d => this.setVote(null, d, idx)} />
-              <IconButton color="secondary" className={this.props.classes.button} style={{ align: 'center' }} aria-label="Add an alarm">
-                {idx ? <DeleteOutlinedIcon onClick={() => this.deletePollItem(idx)}/>: <AddIcon onClick={() => this.addPollItem()}/>}
-              </IconButton>
+              {/*<IconButton color="secondary" className={this.props.classes.button} style={{ align: 'center' }} aria-label="Add an alarm">*/}
+              {/*  {idx ? <DeleteOutlinedIcon onClick={() => this.deletePollItem(idx)}/>: <AddIcon onClick={() => this.addPollItem()}/>}*/}
+              {/*</IconButton>*/}
             </MuiPickersUtilsProvider>
           )}
-          <TextField
-            onChange={this.handleChange('participants')}
-            autoFocus
-            margin="dense"
-            id="participant"
-            label="Participants"
-            type="participants"
-            fullWidth
-          />
+          {/*<TextField*/}
+          {/*  onChange={this.handleChange('participants')}*/}
+          {/*  autoFocus*/}
+          {/*  margin="dense"*/}
+          {/*  id="participant"*/}
+          {/*  label="Participants"*/}
+          {/*  type="participants"*/}
+          {/*  fullWidth*/}
+          {/*/>*/}
         </DialogContent>
         <DialogActions>
           <Button onClick={() => this.props.createEvent(this.state)} color="primary">
