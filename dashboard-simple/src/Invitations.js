@@ -47,7 +47,12 @@ class Invitations extends Component {
 
     getComments = () => {
         axios.get(`${baseUrl}/events/${this.state.eventId}/comments`)
-            .then(({data}) => this.setState({ comments: data.map(({ body, user_id }) => `${user_id}: ${body}`) }));
+            .then(({data}) => {
+                const { comments, users } = data;
+
+                this.setState({ comments: comments.map(({ body, user_id }) =>
+                        `${users.find(({ id }) => id === user_id).name}: ${body}`) })
+            });
     };
 
     componentDidMount() {

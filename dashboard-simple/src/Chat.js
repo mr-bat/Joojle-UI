@@ -36,7 +36,8 @@ class Chat extends React.Component {
   handleSend = () => {
     const {text} = this.state;
 
-    this.setState({ text: '' });
+    this.setState({ text: null });
+    document.getElementById("chat-body").value = "";
     this.props.onSend(text);
   };
   render() {
@@ -56,12 +57,19 @@ class Chat extends React.Component {
             fullWidth
           />)}
           <TextField
+            id="chat-body"
             style={{ paddingTop: 20, width: '75%', paddingRight: 8 }}
             onChange={e => this.setState({text: e.target.value})}
             // onChange={this.handleChange('participants')}
             autoFocus
             margin="dense"
-
+            onKeyPress={(ev) => {
+              console.log(`Pressed keyCode ${ev.key}`);
+              if (ev.key === 'Enter') {
+                this.handleSend();
+                ev.preventDefault();
+              }
+            }}
           />
           <Button onClick={this.handleSend} color="primary" style={{ verticalAlign: 'bottom'}}>
             Send!
