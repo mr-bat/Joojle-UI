@@ -74,7 +74,7 @@ class NavBar extends Component {
                 <Button variant="contained" color="primary" className={[classes.button, classes.customColor]} onClick={() => this.setState({ dialogOpen: true })}>
                     Create
                 </Button>
-                <Button variant="contained" color="primary" className={[classes.button, classes.customColor]}>
+                <Button variant="contained" color="primary" className={[classes.button, classes.customColor]} onClick={() => window.location.reload(false)}>
                     Logout
                 </Button>
                 <Link to='/invitations' >
