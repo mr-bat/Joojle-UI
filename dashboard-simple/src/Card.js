@@ -217,7 +217,15 @@ class Card extends Component {
             </ExpansionPanelSummary>
             <div className={classes.chipContainer}>
               {invitations.map(({user, id}) =>
+                  (!!this.props.invitationId)?
                   <Chip
+                      disabled={!!this.props.invitationId}
+                      avatar={<Avatar>{user.name[0] || '!'}</Avatar>}
+                      label={user.name}
+                      className={classes.chip}
+                  /> :
+                  <Chip
+                      disabled={!!this.props.invitationId}
                       avatar={<Avatar>{user.name[0] || '!'}</Avatar>}
                       label={user.name}
                       onDelete={() => this.deleteInvitation(id)}
